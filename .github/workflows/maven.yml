@@ -35,4 +35,4 @@ jobs:
         run: mvn verify -e -B -V -Premote-session-tests -Pci -fae "-Dmaven.test.failure.ignore=true" "-Djetty.testtracker.log=true"
 
       - name: Javadoc with Maven
-        run: mvn -e -B -V package source:jar javadoc:jar javadoc:aggregate-jar -Peclipse-release  -DskipTests -Dpmd.skip=true -Dcheckstyle.skip=true
+        run: mvn -e -B -V package source:jar javadoc:jar javadoc:aggregate-jar -DskipTests -Dpmd.skip=true -Dcheckstyle.skip=true
