@@ -7,8 +7,8 @@ jobs:
 
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
-        java: [8, 11, 14, 15-ea]
+        os: [ windows-latest, macOS-latest]
+        java: [8, 11, 14]
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
@@ -32,7 +32,5 @@ jobs:
           java-version: ${{ matrix.java }}
 
       - name: Build with Maven
-        run: mvn verify -e -B -V -Premote-session-tests -Pci -fae "-Dmaven.test.failure.ignore=true" "-Djetty.testtracker.log=true"
+        run: mvn clean install -e -B -V -Premote-session-tests -Pci -fae "-Dmaven.test.failure.ignore=true" "-Djetty.testtracker.log=true"
 
-      - name: Javadoc with Maven
-        run: mvn -e -B -V package source:jar javadoc:jar javadoc:aggregate-jar -DskipTests -Dpmd.skip=true -Dcheckstyle.skip=true
