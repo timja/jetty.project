@@ -12,8 +12,7 @@ pipeline {
           steps {
             container('jetty-build') {
               timeout( time: 120, unit: 'MINUTES' ) {
-                mavenBuild( "jdk8", "clean install -T3 -Premote-session-tests -Pgcloud", "maven3",
-                            [[parserName: 'Maven'], [parserName: 'Java']])
+                mavenBuild( "jdk8", "clean install -T3 -Premote-session-tests -Pgcloud", "maven3")
                 // Collect up the jacoco execution results (only on main build)
                 jacoco inclusionPattern: '**/org/eclipse/jetty/**/*.class',
                        exclusionPattern: '' +
@@ -32,7 +31,7 @@ pipeline {
                        execPattern: '**/target/jacoco.exec',
                        classPattern: '**/target/classes',
                        sourcePattern: '**/src/main/java'
-                recordIssues enabledForFailure: true, tools: [mavenConsole(), java(), javaDoc()]
+                recordIssues enabledForFailure: true, tools: [mavenConsole(), java()]
                 recordIssues enabledForFailure: true, tool: checkStyle()
                 recordIssues enabledForFailure: true, tool: spotBugs()
               }
@@ -45,8 +44,7 @@ pipeline {
           steps {
             container( 'jetty-build' ) {
               timeout( time: 120, unit: 'MINUTES' ) {
-                mavenBuild( "jdk11", "clean install -T3 -Djacoco.skip=true -Premote-session-tests -Pgcloud", "maven3",
-                            [[parserName: 'Maven'], [parserName: 'Java']])
+                mavenBuild( "jdk11", "clean install -T3 -Djacoco.skip=true -Premote-session-tests -Pgcloud", "maven3")
               }
             }
           }
@@ -57,8 +55,7 @@ pipeline {
           steps {
             container( 'jetty-build' ) {
               timeout( time: 120, unit: 'MINUTES' ) {
-                mavenBuild( "jdk15", "clean install -T3 -Djacoco.skip=true -Premote-session-tests -Pgcloud", "maven3",
-                            [[parserName: 'Maven'], [parserName: 'Java']])
+                mavenBuild( "jdk15", "clean install -T3 -Djacoco.skip=true -Premote-session-tests -Pgcloud", "maven3")
               }
             }
           }
@@ -70,8 +67,8 @@ pipeline {
             container( 'jetty-build' ) {
               timeout( time: 40, unit: 'MINUTES' ) {
                 mavenBuild( "jdk11",
-                            "install javadoc:javadoc javadoc:aggregate-jar -DskipTests -Dpmd.skip=true -Dcheckstyle.skip=true",
-                            "maven3", [[parserName: 'Maven'], [parserName: 'JavaDoc'], [parserName: 'Java']])
+                            "install javadoc:javadoc javadoc:aggregate-jar -DskipTests -Dpmd.skip=true -Dcheckstyle.skip=true")
+                recordIssues enabledForFailure: true, tools: [javaDoc()]
               }
             }
           }
@@ -82,8 +79,7 @@ pipeline {
           steps {
             container( 'jetty-build' ) {
               timeout( time: 30, unit: 'MINUTES' ) {
-                mavenBuild( "jdk8", "-T3 -Pcompact3 clean install -DskipTests", "maven3",
-                            [[parserName: 'Maven'], [parserName: 'Java']])
+                mavenBuild( "jdk8", "-T3 -Pcompact3 clean install -DskipTests", "maven3")
               }
             }
           }
@@ -133,7 +129,7 @@ def slackNotif() {
  * @param cmdline the command line in "<profiles> <goals> <properties>"`format.
  * @param consoleParsers array of console parsers to run
  */
-def mavenBuild(jdk, cmdline, mvnName, consoleParsers) {
+def mavenBuild(jdk, cmdline, mvnName) {
   script {
     try {
       withEnv(["JAVA_HOME=${ tool "$jdk" }",
@@ -148,10 +144,7 @@ def mavenBuild(jdk, cmdline, mvnName, consoleParsers) {
     }
     finally
     {
-      junit testResults: '**/target/surefire-reports/*.xml,**/target/invoker-reports/TEST*.xml', allowEmptyResults: true
-      if(consoleParsers!=null){
-        warnings consoleParsers: consoleParsers
-      }
+      junit testResults: '**/target/surefire-reports/*.xml,**/target/invoker-reports/TEST*.xml'
     }
   }
 }
