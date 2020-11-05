@@ -44,7 +44,7 @@ pipeline {
           steps {
             container( 'jetty-build' ) {
               timeout( time: 120, unit: 'MINUTES' ) {
-                mavenBuild( "jdk11", "clean install -T3 -Djacoco.skip=true -Premote-session-tests -Pgcloud", "maven3")
+                mavenBuild( "jdk11", "clean install -T3 -Djacoco.skip=true -Perrorprone -Premote-session-tests -Pgcloud", "maven3")
               }
             }
           }
