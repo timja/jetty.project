@@ -13,7 +13,7 @@ pipeline {
             container('jetty-build') {
               timeout( time: 120, unit: 'MINUTES' ) {
                 mavenBuild( "jdk11", "-T3 clean install -Premote-session-tests -Pgcloud", "maven3",
-                            [[parserName: 'Maven'], [parserName: 'Java']] ) // -Pautobahn
+                            [[parserName: 'Maven'], [parserName: 'Java'], [parserName: 'JavaDoc']] ) // -Pautobahn
                 // Collect up the jacoco execution results (only on main build)
                 jacoco inclusionPattern: '**/org/eclipse/jetty/**/*.class',
                        exclusionPattern: '' +
@@ -43,7 +43,7 @@ pipeline {
             container( 'jetty-build' ) {
               timeout( time: 120, unit: 'MINUTES' ) {
                 mavenBuild( "jdk15", "clean install -T3 -Djacoco.skip=true -Premote-session-tests -Pgcloud -Djacoco.skip=true", "maven3",
-                            [[parserName: 'Maven'], [parserName: 'Java']])
+                            [[parserName: 'Maven'], [parserName: 'Java'], [parserName: 'JavaDoc']])
               }
             }
           }
