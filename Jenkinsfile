@@ -67,7 +67,7 @@ pipeline {
 def slackNotif() {
   script {
     try {
-      if ( env.BRANCH_NAME == 'jetty-10.0.x' || env.BRANCH_NAME == 'jetty-9.4.x' || env.BRANCH_NAME == 'jetty-11.0.x') {
+      if ( env.BRANCH_NAME == 'jetty-10.0.x' || env.BRANCH_NAME == 'jetty-11.0.x') {
         //BUILD_USER = currentBuild.rawBuild.getCause(Cause.UserIdCause).getUserId()
         // by ${BUILD_USER}
         COLOR_MAP = ['SUCCESS': 'good', 'FAILURE': 'danger', 'UNSTABLE': 'danger', 'ABORTED': 'danger']
@@ -99,7 +99,7 @@ def mavenBuild(jdk, cmdline, mvnName, consoleParsers) {
                "MAVEN_OPTS=-Xms2g -Xmx4g -Djava.awt.headless=true"]) {
         configFileProvider(
                 [configFile(fileId: 'oss-settings.xml', variable: 'GLOBAL_MVN_SETTINGS')]) {
-          sh "mvn -s $GLOBAL_MVN_SETTINGS -DsettingsPath=$GLOBAL_MVN_SETTINGS -Pci -V -B -e -Djetty.testtracker.log=true $cmdline -Dunix.socket.tmp=" +
+          sh "mvn -s $GLOBAL_MVN_SETTINGS -DsettingsPath=$GLOBAL_MVN_SETTINGS -Pci -V -B -e -Djetty.testtracker.log=true $cmdline javadoc:jar -Dunix.socket.tmp=" +
                      env.JENKINS_HOME
         }
       }
