@@ -67,7 +67,8 @@ pipeline {
             container( 'jetty-build' ) {
               timeout( time: 40, unit: 'MINUTES' ) {
                 mavenBuild( "jdk11",
-                            "install javadoc:javadoc javadoc:aggregate-jar -DskipTests -Dpmd.skip=true -Dcheckstyle.skip=true")
+                            "install javadoc:javadoc javadoc:aggregate-jar -DskipTests -Dpmd.skip=true -Dcheckstyle.skip=true",
+                            "maven3")
                 recordIssues enabledForFailure: true, tools: [javaDoc()]
               }
             }
