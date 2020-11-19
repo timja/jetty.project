@@ -1393,6 +1393,7 @@
         <spotbugs.threshold>Medium</spotbugs.threshold>
         <!-- Defines a SpotBugs effort. Use "Max" to maximize the scan depth -->
         <spotbugs.effort>Default</spotbugs.effort>
+        <spotbugs.skip>false</spotbugs.skip>
       </properties>
       <modules>
         <module>aggregates/jetty-all</module>
@@ -1420,6 +1421,7 @@
             <groupId>com.github.spotbugs</groupId>
             <artifactId>spotbugs-maven-plugin</artifactId>
             <configuration>
+              <skip>${spotbugs.skip}</skip>
               <failOnError>${spotbugs.failOnError}</failOnError>
             </configuration>
             <executions>
