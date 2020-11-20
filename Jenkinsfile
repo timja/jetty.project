@@ -31,9 +31,7 @@ pipeline {
                        execPattern: '**/target/jacoco.exec',
                        classPattern: '**/target/classes',
                        sourcePattern: '**/src/main/java'
-                recordIssues enabledForFailure: true, tools: [mavenConsole(), java()]
-                recordIssues enabledForFailure: true, tool: checkStyle()
-                recordIssues enabledForFailure: true, tool: spotBugs()
+                recordIssues enabledForFailure: true, tools: [mavenConsole(), java(), checkStyle(), spotBugs()]
               }
             }
           }
